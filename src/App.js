@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import List from "./components/List";
 
-function App() {
+const App = () => {
+  const [name, setName] = useState("");
+  const [todos, setToDos] = useState([
+    {
+      contents: "Make react object",
+      isDeleted: false,
+      id: name,
+    },
+  ]);
+
+  const handleOnChange = (e) => {
+    setName(e.currentTarget.value);
+  };
+
+  const handleAddToDo = () => {
+    setToDos((prevState) =>
+      prevState.concat({ contents: name, isDone: false, id: name })
+    );
+    setName("");
+  };
+
+  const deleteToDo = (id) => {
+    console.log("Removing to do : " + id);
+    setToDos((prevState) => prevState.filter((item) => item.id !== id));
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Hello, {name}</h1>
+      <input type="text" value={name} onChange={handleOnChange} />
+      <button onClick={handleAddToDo}>Add</button>
+      <List items={todos} deleteToDo={deleteToDo} count={todos.length} />
     </div>
   );
-}
+};
 
 export default App;
